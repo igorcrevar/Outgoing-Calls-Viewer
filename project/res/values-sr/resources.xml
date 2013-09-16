@@ -1,0 +1,30 @@
+<resources>
+
+    <string-array name="rounded_by">
+        <item>Nema zaokuruživanja</item>
+        <item>Samo prvi minut</item>
+        <item>Svaki minut 60 + 60</item>
+	    <item>Prvi minut odmah ostali posle 30 sekundi</item>
+  </string-array>
+   
+    <string-array name="sort_by_names">
+        <item>Datum&amp;Vreme opadajuće</item>
+        <item>Datum&amp;Vreme rastuće</item>
+        <item>Trajanje opadajuće</item>
+	    <item>Trajanje rastuće</item>
+  </string-array>
+  
+   <string-array name="sort_by">
+        <item>Datum&amp;Vreme opadajuće</item>
+        <item>Datum&amp;Vreme rastuće</item>
+        <item>Trajanje opadajuće</item>
+	    <item>Trajanje rastuće</item>
+	    <item>Ime opadajuće</item>
+        <item>Ime rastuće</item>
+        <item>Grupisano po imenu opadajuće</item>
+	    <item>Grupisano po imenu rastuće</item>
+	    <item>Grupisano po danima</item>
+        <item>Grupisano po mesecima</item>
+  </string-array>
+            
+</resources>

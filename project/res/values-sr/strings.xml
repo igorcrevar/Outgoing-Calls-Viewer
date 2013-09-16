@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, CallStatsActivity!</string>
+    <string name="app_name">Outgoing Calls Stats</string>
+	<string name="days_month_prompt">Izaberi datum u mesecu</string>
+	<string name="days_in_month_prompt">Izaberi broj dana u mesecu</string>
+	<string name="settings_file">settings.dat</string>
+	<string name="sort_promt">Sortiraj po</string>
+	<string name="rounding_promt">Zaokruživanje</string>
+	<string name="invalid_date_interval_message">Pogrešan interval!</string>
+	<string name="settings">Podešavanja</string>
+	<string name="chart_day">Grafikon dana</string>
+	<string name="chart_month">Grafikon meseci</string>
+	<string name="about">O...</string>
+	<string name="normal_view">Normalan pogled</string>
+	<string name="pie_chart">Pita grafikon</string>
+	<string name="about_text">Načukao Igor Crevar (2012)\n\n JJoe64 GraphView je korišćen za chartove</string>
+	<string name="pref_start_of_month_title">Početak meseca</string>
+	<string name="pref_start_of_month_desc">Kog dana počinje mesečna pretplata?</string>
+	<string name="pref_minute_rounding_title">Zaokuruživanje minuta</string>
+	<string name="pref_minute_rounding_desc">Da li operater zaokružuje minute?</string>
+	<string name="pref_to_date_fixed_title">Fixiranje do datuma</string>
+	<string name="pref_to_date_fixed_desc">+1 mesec</string>
+	<string name="minutes_formater">\u0020(%s minuta)</string>	
+	<string name="duration_string">Ukupno:\u0020</string>
+	<string name="exit">Izlaz</string>
+	
+</resources>

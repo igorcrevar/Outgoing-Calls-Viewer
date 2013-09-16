@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+   
+   <com.rogicrew.callstats.components.HeaderComponent
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/outgoingHeaderComponent"
+        />
+         
+   <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    	<TextView 
+    	    android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="@string/duration_string"
+    		android:textSize="10dip"
+    		/>
+    	<TextView 
+    	    android:id="@+id/textviewDurationSum"
+    	    android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:textSize="12dip"
+    		android:text=""
+    		/>
+    	
+    	<TextView 
+    	    android:id="@+id/breadcrumbs"
+    	    android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:gravity="right"
+    		android:textSize="12dip"
+    		android:text=""
+    		/>
+    </LinearLayout>
+    
+    <include layout="@layout/separator_line" />
+    
+   <ProgressBar android:id="@+id/progressBarList"
+       	android:indeterminateBehavior="cycle"
+       	android:indeterminate="true"
+       	android:visibility="gone"
+       	android:layout_width="fill_parent"
+  		android:layout_height="wrap_content" />
+   <ListView
+  		android:id="@+id/listviewOutgoingCalls"
+  		android:layout_width="fill_parent"
+  		android:layout_height="fill_parent">
+	</ListView>
+
+  
+</LinearLayout>

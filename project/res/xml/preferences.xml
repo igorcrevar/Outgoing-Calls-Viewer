@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+   <PreferenceCategory android:title="@string/settings">
+       <ListPreference android:title="@string/pref_start_of_month_title" 
+           	android:summary="@string/pref_start_of_month_desc" android:key="start_of_month" 
+            android:id="@+id/startOfMonth" />
+       
+        <ListPreference android:title="@string/pref_minute_rounding_title" 
+            android:summary="@string/pref_minute_rounding_desc" 
+            android:key="minute_rounding" 
+            android:entries="@array/rounded_by" />
+        
+        <CheckBoxPreference
+                android:key="is_to_date_fixed"
+                android:title="@string/pref_to_date_fixed_title"
+                android:defaultValue="true"
+                android:summary="@string/pref_to_date_fixed_desc" />
+        
+        <!-- 
+        <EditTextPreference android:key="pie_chart_entries" 
+            	android:title="Pie chart entries"
+                android:defaultValue="5"
+                android:summary="How manu entries in pie chart do you want" />
+     -->
+    </PreferenceCategory>
+    
+  
+</PreferenceScreen>
