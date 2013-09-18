@@ -19,12 +19,11 @@ import android.content.SharedPreferences;
 
 public class Utils {
 
-	public static String emptyString = "";
 	public static SharedPreferences preferences;
 	
 	public static boolean isNullOrEmpty(String s)
 	{
-		return s == null || s.equals(emptyString);
+		return s == null || s.equals("");
 	}
 	
 	public static boolean writeFile(Context ctx, String fileName, String content){
@@ -149,5 +148,30 @@ public class Utils {
 	private static String digit2(int comp)
 	{
 		return comp < 10 ? "0" + Integer.toString(comp) : Integer.toString(comp);
+	}
+	
+	public static long getDuration(long duration, int roundingOption){
+		switch (roundingOption){
+		default: //no rounding
+			return duration; 
+		case 1: //only first minute
+			if (duration < 60){
+				return 60;
+			}
+			return duration;
+		case 2: //every minute	
+		{
+			long minutes = duration / 60;
+			long secondsRoundedToMin = duration % 60 > 0 ? 1 : 0;
+			return (minutes + secondsRoundedToMin) * 60;
+		}
+		case 3: //first minute, other by 30 seconds
+			if (duration < 60){
+				return 60;
+			}
+			long minutes = duration / 60;
+			long secondsRoundedToMin = duration % 60 >= 30 ? 1 : 0;
+			return (minutes + secondsRoundedToMin) * 60;	
+		}
 	}
 }

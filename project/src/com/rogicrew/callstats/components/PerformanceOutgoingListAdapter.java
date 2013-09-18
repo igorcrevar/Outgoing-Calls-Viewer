@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.rogicrew.callstats.R;
-import com.rogicrew.callstats.models.CallModel.CallElement;
+import com.rogicrew.callstats.models.CallElement;
 import com.rogicrew.callstats.models.SortByEnum;
 import com.rogicrew.callstats.utils.Utils;
 
@@ -64,7 +64,7 @@ public class PerformanceOutgoingListAdapter extends ArrayAdapter<CallElement> {
 		}
 		
 		// generate duration string
-		long duration = el.duration;
+		long duration = el.getDuration();
 		durationStr = Utils.getFormatedTime((int)(duration / 3600), (int)(duration / 60 % 60), (int)(duration % 60));		
 		if (SortByEnum.NameDurationAsc == sortBy || sortBy == SortByEnum.NameDurationDesc){
 			int minSum = (int)(duration / 3600 * 60 +  duration / 60 % 60);
@@ -74,15 +74,15 @@ public class PerformanceOutgoingListAdapter extends ArrayAdapter<CallElement> {
 		// generate date string
 		if (sortBy != SortByEnum.ByDays && sortBy != SortByEnum.ByMonths)
 		{
-			dateStr = Utils.getFormatedDateTime(this.getContext(), el.dateOfCall);
+			dateStr = Utils.getFormatedDateTime(this.getContext(), el.getDateOfCall());
 		}
 		else {
-			dateStr = Utils.getFormatedDate(this.getContext(), el.dateOfCall);
+			dateStr = Utils.getFormatedDate(this.getContext(), el.getDateOfCall());
 		}
 		
 		viewHolder.update(
-				Utils.isNullOrEmpty(el.name) ? "-" : el.name,
-				el.phone,
+				el.getName(),
+				el.getPhone(),
 				dateStr,
 				durationStr);
 		

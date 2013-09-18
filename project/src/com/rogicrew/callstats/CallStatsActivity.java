@@ -2,7 +2,6 @@ package com.rogicrew.callstats;
 
 import java.util.List;
 import java.util.Stack;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,17 +17,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.rogicrew.callstats.components.HeaderComponent;
 import com.rogicrew.callstats.components.HeaderComponent.IHeaderComponentChanged;
 import com.rogicrew.callstats.components.PerformanceOutgoingListAdapter;
+import com.rogicrew.callstats.models.CallElement;
 import com.rogicrew.callstats.models.CallModel;
-import com.rogicrew.callstats.models.CallModel.CallElement;
+import com.rogicrew.callstats.models.CallsFilter;
 import com.rogicrew.callstats.models.SimpleDate;
 import com.rogicrew.callstats.models.SortByEnum;
 import com.rogicrew.callstats.utils.Utils;
 
-public class CallStatsActivity extends Activity implements IHeaderComponentChanged, OnItemClickListener{
+public class CallStatsActivity extends Activity implements IHeaderComponentChanged, OnItemClickListener {
 	private static final String breadcrumbsPrefixFirst = "<< ";
 	private static final String breadcrumbsPrefixNext  = "<< ... ";
 	
@@ -41,8 +40,8 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 	private volatile boolean isRefreshing = false;
 	private String mMinutesFormater;
 	
-	private CallModel.Filter mCurrentFilter;
-	private Stack<CallModel.Filter> mStackFilters;
+	private CallsFilter mCurrentFilter;
+	private Stack<CallsFilter> mStackFilters;
 	
     /** Called when the activity is first created. */
     @Override
@@ -52,8 +51,8 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
         //set prerefences for utils
         Utils.preferences = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
         mCallModel = new CallModel();
-        mCurrentFilter = new CallModel.Filter();
-        mStackFilters = new Stack<CallModel.Filter>();
+        mCurrentFilter = new CallsFilter();
+        mStackFilters = new Stack<CallsFilter>();
         
         mListView = (ListView)findViewById(R.id.listviewOutgoingCalls);   
         mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
@@ -68,20 +67,19 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
         mHeaderComponent.mHeaderComponentChangedCallback = this;
     }
     
-    public void onClick(View view){
+    public void onClick(View view) {
     	
     }
     
     @Override
-    public void onStart()
-    {
+    public void onStart() {
     	super.onStart();
     	mMinutesFormater = getString(R.string.minutes_formater);
     }
     
     //called after user navigates back to actvity
     @Override
-    public void onRestart(){
+    public void onRestart() {
     	super.onRestart();    		
     	mHeaderComponent.initOnRestart();
     	populateList();
@@ -95,12 +93,10 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
     }
     
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) 
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
     	Bundle bundle;
     	Intent newIntent;
-        switch (item.getItemId()) 
-        {
+        switch (item.getItemId()) {
             case R.id.setingsMenuItem:
             	Intent preferencesActivityIntent = new Intent(this, MyPreferencesActivity.class);
             	this.startActivity(preferencesActivityIntent);
@@ -128,14 +124,15 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
             case R.id.exitMenuItem:
             	finish();
             	return true;
+        	default:
+        		return false;
         }
-        return false;
     }
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-       if (keyCode == KeyEvent.KEYCODE_BACK){
-    	    if (mStackFilters.size() > 0){
+       if (keyCode == KeyEvent.KEYCODE_BACK) {
+    	    if (mStackFilters.size() > 0) {
     	    	//current filter is previous one now
     	    	mCurrentFilter = mStackFilters.pop();
     	    	//update ui
@@ -143,7 +140,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
             	mHeaderComponent.setDateInterval(mCurrentFilter.fromDate, mCurrentFilter.toDate);
             	populateList();
     	    }        	
-        	else{
+        	else {
         		finish();
         	}
         	
@@ -162,13 +159,13 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 		populateList();
 	}
 	
-	private void populateBreadcrumbs(String value){
+	private void populateBreadcrumbs(String value) {
 		String prefix = mStackFilters.size() > 1 ? breadcrumbsPrefixNext : breadcrumbsPrefixFirst;
 		mBreadcrumb.setText(prefix + value);
 	}
 	
-	private void populateList(){
-		if (!isRefreshing){
+	private void populateList() {
+		if (!isRefreshing) {
 		
 			isRefreshing = true;
 			mProgressBar.setVisibility(View.VISIBLE);
@@ -178,18 +175,18 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 				private CallStatsActivity thisActivity = null;
 				
 				@Override
-				protected void onPreExecute(){
-					if (!Utils.isNullOrEmpty(mCurrentFilter.contactName)){
+				protected void onPreExecute() {
+					if (!Utils.isNullOrEmpty(mCurrentFilter.contactName)) {
 						populateBreadcrumbs(mCurrentFilter.contactName);
 					}
-					else if (!Utils.isNullOrEmpty(mCurrentFilter.phone)){
+					else if (!Utils.isNullOrEmpty(mCurrentFilter.phone)) {
 						populateBreadcrumbs(mCurrentFilter.phone);
 					}
-					else if (mCurrentFilter.tag != null){
+					else if (mCurrentFilter.tag != null) {
 						populateBreadcrumbs((String)mCurrentFilter.tag);						
 					}
-					else{
-						mBreadcrumb.setText(Utils.emptyString);
+					else {
+						mBreadcrumb.setText("");
 					}
 				}
 				
@@ -223,7 +220,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 		
 	}
 	
-	public SortByEnum getSortBy(){
+	public SortByEnum getSortBy() {
 		return mHeaderComponent.getSortBy();
 	}
 
@@ -233,32 +230,32 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 		CallElement el = elems.get(position);
 		
 		//push current filter to stack
-		mStackFilters.push(new CallModel.Filter(mCurrentFilter));
+		mStackFilters.push(new CallsFilter(mCurrentFilter));
 		
-		if (!Utils.isNullOrEmpty(el.phone)){ //phone record is non empty if users are show
+		if (!Utils.isNullOrEmpty(el.getPhone())) { //phone record is non empty if users are show
 			//if user has name then filter by name otherwise by phone
-			if (Utils.isNullOrEmpty(el.name)){
-				mCurrentFilter.phone = el.phone;
+			if (Utils.isNullOrEmpty(el.getName())) {
+				mCurrentFilter.phone = el.getPhone();
 				mCurrentFilter.contactName = null;
 			}
-			else{
+			else {
 				mCurrentFilter.phone = null;
-				mCurrentFilter.contactName = el.name;
+				mCurrentFilter.contactName = el.getName();
 			}
 			mCurrentFilter.tag = null; //no tag
 			populateList();
 		}
 		else{								
 			mCurrentFilter.phone = mCurrentFilter.contactName = null;		
-			mCurrentFilter.tag = el.name; //save tag because it will be in breadcrumbs
+			mCurrentFilter.tag = el.getName(); //save tag because it will be in breadcrumbs
 			
 			//calculate new filter from date - to date. new sort by depending on current sort by. Update UI
-			mCurrentFilter.fromDate = mCurrentFilter.toDate = new SimpleDate(new java.util.Date(el.dateOfCall));
-			if (getSortBy() ==  SortByEnum.ByMonths){
+			mCurrentFilter.fromDate = mCurrentFilter.toDate = new SimpleDate(new java.util.Date(el.getDateOfCall()));
+			if (getSortBy() ==  SortByEnum.ByMonths) {
 				mCurrentFilter.toDate = SimpleDate.getNextMonth(mCurrentFilter.fromDate);
 				mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DateDesc);				
 			}
-			else{
+			else {
 				mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DurationDesc);
 			}
 				
@@ -267,5 +264,4 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 			populateList();
 		}
 	}
-    
 }

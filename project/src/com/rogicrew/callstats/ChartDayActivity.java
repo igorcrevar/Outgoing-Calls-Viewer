@@ -1,7 +1,5 @@
 package com.rogicrew.callstats;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -10,7 +8,9 @@ import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.rogicrew.callstats.graphview.MyLineGraphView;
 import com.rogicrew.callstats.models.CallModel;
+import com.rogicrew.callstats.models.CallsFilter;
 import com.rogicrew.callstats.models.SimpleDate;
+import com.rogicrew.callstats.models.SortByEnum;
 import com.rogicrew.callstats.utils.Utils;
 
 public class ChartDayActivity extends Activity {
@@ -19,8 +19,8 @@ public class ChartDayActivity extends Activity {
 	    super.onCreate(savedInstanceState);
     	
     	Bundle params = this.getIntent().getExtras();
-    	CallModel.Filter filterPassed = (CallModel.Filter)params.get("filter");
-    	CallModel.Filter filter = new CallModel.Filter(filterPassed);
+    	CallsFilter filterPassed = (CallsFilter)params.get("filter");
+    	CallsFilter filter = new CallsFilter(filterPassed);
     	SimpleDate currentDate = new SimpleDate();    	
     	if (currentDate.isLessThen(filter.toDate)){
     		filter.toDate = currentDate;
@@ -44,8 +44,8 @@ public class ChartDayActivity extends Activity {
     	graphView.setScrollable(true);
     	graphView.setScalable(true);
     	CallModel callModel = new CallModel();
-    	List<GraphViewData> data = callModel.loadForDayChart(this, filter);
-		GraphViewData[] arrData = data.toArray(new GraphViewData[0]);
+    	filter.sortBy = SortByEnum.ByDays;
+    	GraphViewData[] arrData = callModel.loadForChart(this, filter);
 		graphView.addSeries(new GraphViewSeries(arrData));		
 		setContentView(graphView);
 	 }

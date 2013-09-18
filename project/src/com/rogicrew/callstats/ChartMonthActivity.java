@@ -1,7 +1,5 @@
 package com.rogicrew.callstats;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +10,9 @@ import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.rogicrew.callstats.graphview.MyLineGraphView;
 import com.rogicrew.callstats.models.CallModel;
+import com.rogicrew.callstats.models.CallsFilter;
 import com.rogicrew.callstats.models.SimpleDate;
+import com.rogicrew.callstats.models.SortByEnum;
 import com.rogicrew.callstats.utils.Utils;
 
 public class ChartMonthActivity extends Activity{
@@ -22,8 +22,8 @@ public class ChartMonthActivity extends Activity{
 	    super.onCreate(savedInstanceState);
     	
     	Bundle params = this.getIntent().getExtras();
-    	CallModel.Filter filterPassed = (CallModel.Filter)params.get("filter");
-    	CallModel.Filter filter = new CallModel.Filter(filterPassed);
+    	CallsFilter filterPassed = (CallsFilter)params.get("filter");
+    	CallsFilter filter = new CallsFilter(filterPassed);
     	//create nice string representation of start and end date
     	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
     	int firstDayOfMonth = Integer.parseInt(preferences.getString("start_of_month", "1"));
@@ -62,8 +62,8 @@ public class ChartMonthActivity extends Activity{
     	graphView.setScrollable(true);
     	graphView.setScalable(true);
     	CallModel callModel = new CallModel();
-    	List<GraphViewData> data = callModel.loadForMonthChart(this, filter);
-		GraphViewData[] arrData = data.toArray(new GraphViewData[0]);
+    	filter.sortBy = SortByEnum.ByMonths;
+    	GraphViewData[] arrData = callModel.loadForChart(this, filter);
 		graphView.addSeries(new GraphViewSeries(arrData));		
 		setContentView(graphView);
 	 }
