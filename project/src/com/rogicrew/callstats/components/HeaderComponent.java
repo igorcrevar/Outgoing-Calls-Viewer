@@ -118,16 +118,7 @@ public class HeaderComponent extends LinearLayout implements IDatePickerOnChange
 	public SortByEnum getSortBy()
 	{
 		int i = mSpinnerOrderBy.getSelectedItemPosition();
-		int ind = 0;
-		SortByEnum sortBy = SortByEnum.DateDesc;
-		for (SortByEnum val : SortByEnum.values()) {
-	        if (i == ind){
-	        	sortBy = val;
-	        	break;
-	        }
-	        ++ind;
-	    }
-		
+		SortByEnum sortBy = SortByEnum.values()[i];
 		return sortBy;
 	}
 	
@@ -154,9 +145,9 @@ public class HeaderComponent extends LinearLayout implements IDatePickerOnChange
 	public void initOrderBy(boolean isAll)
 	{
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-								this.getContext(), isAll ? R.array.sort_by : R.array.sort_by_names, android.R.layout.simple_spinner_item );
-		adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
-		mSpinnerOrderBy.setAdapter( adapter );
+								this.getContext(), isAll ? R.array.sort_by : R.array.sort_by_names, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mSpinnerOrderBy.setAdapter(adapter);
 		mSpinnerOrderBy.setSelection(0);        	
 	}
 	
@@ -169,14 +160,6 @@ public class HeaderComponent extends LinearLayout implements IDatePickerOnChange
 	}
 	
 	public void setSortBy(SortByEnum sortBy){
-		int ind = 0;
-		for (SortByEnum val : SortByEnum.values()) {
-	        if (sortBy == val){
-	        	mSpinnerOrderBy.setSelection(ind);
-	        	break;
-	        }
-	        
-	        ++ind;
-	    }
+		mSpinnerOrderBy.setSelection(sortBy.ordinal());	
 	}
 }

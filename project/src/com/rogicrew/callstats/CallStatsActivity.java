@@ -1,5 +1,6 @@
 package com.rogicrew.callstats;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Stack;
 import android.app.Activity;
@@ -158,12 +159,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 		mCurrentFilter.toDate = to;
 		populateList();
 	}
-	
-	private void populateBreadcrumbs(String value) {
-		String prefix = mStackFilters.size() > 1 ? breadcrumbsPrefixNext : breadcrumbsPrefixFirst;
-		mBreadcrumb.setText(prefix + value);
-	}
-	
+
 	private void populateList() {
 		if (!isRefreshing) {
 		
@@ -176,17 +172,14 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 				
 				@Override
 				protected void onPreExecute() {
-					if (!Utils.isNullOrEmpty(mCurrentFilter.contactName)) {
-						populateBreadcrumbs(mCurrentFilter.contactName);
-					}
-					else if (!Utils.isNullOrEmpty(mCurrentFilter.phone)) {
-						populateBreadcrumbs(mCurrentFilter.phone);
-					}
-					else if (mCurrentFilter.tag != null) {
-						populateBreadcrumbs((String)mCurrentFilter.tag);						
-					}
-					else {
+					if (mCurrentFilter.tag == null)
+					{
 						mBreadcrumb.setText("");
+					}
+					else
+					{
+						String prefix = mStackFilters.size() > 1 ? breadcrumbsPrefixNext : breadcrumbsPrefixFirst;
+						mBreadcrumb.setText(prefix + (String)mCurrentFilter.tag);
 					}
 				}
 				
@@ -226,42 +219,42 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {		
-		List<CallElement> elems = mCallModel.getElements();
-		CallElement el = elems.get(position);
-		
 		//push current filter to stack
 		mStackFilters.push(new CallsFilter(mCurrentFilter));
 		
-		if (!Utils.isNullOrEmpty(el.getPhone())) { //phone record is non empty if users are show
+		List<CallElement> elems = mCallModel.getElements();
+		CallElement el = elems.get(position);
+		if (!mCurrentFilter.isByDayOrMonthFilter()) {
+			mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DurationDesc);
 			//if user has name then filter by name otherwise by phone
 			if (Utils.isNullOrEmpty(el.getName())) {
-				mCurrentFilter.phone = el.getPhone();
-				mCurrentFilter.contactName = null;
+				mCurrentFilter.tag = mCurrentFilter.phone = el.getPhone();
+				mCurrentFilter.contactName = null;				
 			}
 			else {
 				mCurrentFilter.phone = null;
-				mCurrentFilter.contactName = el.getName();
-			}
-			mCurrentFilter.tag = null; //no tag
-			populateList();
+				mCurrentFilter.tag = mCurrentFilter.contactName = el.getName();
+			}		
 		}
-		else{								
-			mCurrentFilter.phone = mCurrentFilter.contactName = null;		
-			mCurrentFilter.tag = el.getName(); //save tag because it will be in breadcrumbs
-			
-			//calculate new filter from date - to date. new sort by depending on current sort by. Update UI
-			mCurrentFilter.fromDate = mCurrentFilter.toDate = new SimpleDate(new java.util.Date(el.getDateOfCall()));
-			if (getSortBy() ==  SortByEnum.ByMonths) {
-				mCurrentFilter.toDate = SimpleDate.getNextMonth(mCurrentFilter.fromDate);
-				mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DateDesc);				
-			}
-			else {
+		else {
+			mCurrentFilter.phone = mCurrentFilter.contactName = null;
+			mCurrentFilter.fromDate = new SimpleDate(new Date(el.getDateOfCall()));
+			mCurrentFilter.toDate = new SimpleDate(new Date(el.getDateOfCall()));
+			switch (mCurrentFilter.sortBy) {
+			case ByDays: case ByDaysDurationAsc : case ByDaysDurationDesc:
+				mCurrentFilter.tag = el.getPhone();
 				mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DurationDesc);
+				break;
+			default:
+				mCurrentFilter.tag = el.getName();
+				mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DurationDesc);
+				mCurrentFilter.toDate = SimpleDate.getNextMonth(mCurrentFilter.toDate);
+				break;
 			}
-				
-			//update ui
+			
 			mHeaderComponent.setDateInterval(mCurrentFilter.fromDate, mCurrentFilter.toDate);
-			populateList();
 		}
+		
+		populateList();
 	}
 }

@@ -45,7 +45,7 @@ public class ChartDayActivity extends Activity {
     	graphView.setScalable(true);
     	CallModel callModel = new CallModel();
     	filter.sortBy = SortByEnum.ByDays;
-    	GraphViewData[] arrData = callModel.loadForChart(this, filter);
+    	GraphViewData[] arrData = callModel.loadForDayChart(this, filter);
 		graphView.addSeries(new GraphViewSeries(arrData));		
 		setContentView(graphView);
 	 }

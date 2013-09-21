@@ -92,9 +92,9 @@ public class CallsFilter implements Cloneable, Serializable
 		switch (sortBy) {
 		case NameDurationAsc: case NameDurationDesc:
 			return new GroupByNamePhoneCallHandler(!Utils.isNullOrEmpty(contactName));
-		case ByDays:
+		case ByDays: case ByDaysDurationAsc: case ByDaysDurationDesc:
 			return new GroupByDayCallHandler();
-		case ByMonths:
+		case ByMonths: case ByMonthsDurationAsc: case ByMonthsDurationDesc:
 			return new GroupByMonthCallHandler();
 		default:
 			return new DefaultCallHandler();
@@ -103,14 +103,25 @@ public class CallsFilter implements Cloneable, Serializable
 	
 	public void sort(List<CallElement> elements) {
 		switch (sortBy) {
-		case NameDurationAsc:
+		case NameDurationAsc: case ByDaysDurationAsc: case ByMonthsDurationAsc:
 			Collections.sort(elements, new CallElementComparator.Duration());
 			break;
-		case NameDurationDesc:
+		case NameDurationDesc: case ByMonthsDurationDesc : case ByDaysDurationDesc:
 			Collections.sort(elements, new CallElementComparator.DurationReverse());
 			break;
 		default:
 			break;
+		}
+	}
+	
+	public boolean isByDayOrMonthFilter() {
+		switch (sortBy)
+		{
+		case ByMonths: case ByMonthsDurationAsc: case ByMonthsDurationDesc:
+		case ByDays: case ByDaysDurationAsc: case ByDaysDurationDesc:
+			return true;
+		default:
+			return false;
 		}
 	}
 }

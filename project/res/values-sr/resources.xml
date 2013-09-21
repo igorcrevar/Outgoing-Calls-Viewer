@@ -21,10 +21,14 @@
 	    <item>Trajanje rastuće</item>
 	    <item>Ime opadajuće</item>
         <item>Ime rastuće</item>
+       	<item>Grupisano po danima</item>
+        <item>Grupisano po mesecima</item>
         <item>Grupisano po imenu opadajuće</item>
 	    <item>Grupisano po imenu rastuće</item>
-	    <item>Grupisano po danima</item>
-        <item>Grupisano po mesecima</item>
+        <item>Grupisano po danima opadajuće</item>
+        <item>Grupisano po danima rastuće</item>
+        <item>Grupisano po mesecima rastuće</item>
+        <item>Grupisano po mesecima opadajuće</item>
   </string-array>
             
 </resources>

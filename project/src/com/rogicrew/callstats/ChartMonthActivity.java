@@ -12,7 +12,6 @@ import com.rogicrew.callstats.graphview.MyLineGraphView;
 import com.rogicrew.callstats.models.CallModel;
 import com.rogicrew.callstats.models.CallsFilter;
 import com.rogicrew.callstats.models.SimpleDate;
-import com.rogicrew.callstats.models.SortByEnum;
 import com.rogicrew.callstats.utils.Utils;
 
 public class ChartMonthActivity extends Activity{
@@ -62,8 +61,7 @@ public class ChartMonthActivity extends Activity{
     	graphView.setScrollable(true);
     	graphView.setScalable(true);
     	CallModel callModel = new CallModel();
-    	filter.sortBy = SortByEnum.ByMonths;
-    	GraphViewData[] arrData = callModel.loadForChart(this, filter);
+    	GraphViewData[] arrData = callModel.loadForMonthChart(this, filter);
 		graphView.addSeries(new GraphViewSeries(arrData));		
 		setContentView(graphView);
 	 }

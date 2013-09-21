@@ -4,27 +4,29 @@
         <item>None</item>
         <item>Only first minute</item>
         <item>Every minute 60 + 60</item>
-	    <item>First minute at start others after 30 secs</item>
-  </string-array>
-   
+        <item>First minute at start others after 30 secs</item>
+    </string-array>
     <string-array name="sort_by_names">
         <item>By Date&amp;Time DESC</item>
         <item>By Date&amp;Time ASC</item>
         <item>By Duration DESC</item>
-	    <item>By Duration ASC</item>
-  </string-array>
-  
-   <string-array name="sort_by">
+        <item>By Duration ASC</item>
+    </string-array>
+    <string-array name="sort_by">
         <item>Date&amp;Time DESC</item>
         <item>Date&amp;Time ASC</item>
         <item>Duration DESC</item>
-	    <item>Duration ASC</item>
-	    <item>Name ASC</item>
+        <item>Duration ASC</item>
+        <item>Name ASC</item>
         <item>Name DESC</item>
-        <item>Grouped by Name+Duration DESC</item>
-	    <item>Grouped by Name+Duration ASC</item>
-	    <item>Grouped by Day</item>
+        <item>Grouped by Day</item>
         <item>Grouped by Month</item>
-  </string-array>
-            
+        <item>Grouped by Name+Duration DESC</item>
+        <item>Grouped by Name+Duration ASC</item>        
+        <item>Grouped by Day+Duration DESC</item>
+        <item>Grouped by Day+Duration ASC</item>
+        <item>Grouped by Month+Duration DESC</item>
+        <item>Grouped by Month+Duration ASC</item>
+    </string-array>
+
 </resources>
