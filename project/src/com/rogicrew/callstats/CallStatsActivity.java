@@ -227,7 +227,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 		if (!mCurrentFilter.isByDayOrMonthFilter()) {
 			mHeaderComponent.setSortBy(mCurrentFilter.sortBy = SortByEnum.DurationDesc);
 			//if user has name then filter by name otherwise by phone
-			if (Utils.isNullOrEmpty(el.getName())) {
+			if (Utils.isNullOrEmpty(el.getName()) || el.getName().equals("-")) {
 				mCurrentFilter.tag = mCurrentFilter.phone = el.getPhone();
 				mCurrentFilter.contactName = null;				
 			}
