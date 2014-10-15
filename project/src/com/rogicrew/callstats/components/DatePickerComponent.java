@@ -7,7 +7,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +22,7 @@ public class DatePickerComponent extends LinearLayout implements android.view.Vi
 	}
 	
 	private TextView mTextView;
-	private Button mButton;
+	// private Button mButton;
 	private SimpleDate mDate;
 	private IDatePickerOnChangeCallback mCallbackOnChange;
 	
@@ -36,8 +35,8 @@ public class DatePickerComponent extends LinearLayout implements android.view.Vi
 		
 		mTextView = (TextView)findViewById(R.id.dp_text);
 		mTextView.setOnClickListener(this);
-		mButton = (Button)findViewById(R.id.dp_button);
-		mButton.setOnClickListener(this);
+	//	mButton = (Button)findViewById(R.id.dp_button);
+	//	mButton.setOnClickListener(this);
 		
 		mDate = new SimpleDate();
 	}
@@ -73,7 +72,7 @@ public class DatePickerComponent extends LinearLayout implements android.view.Vi
 	public void setEnabled(boolean enabled){
 		super.setEnabled(enabled);
 		mTextView.setEnabled(enabled);
-		mButton.setEnabled(enabled);
+		// mButton.setEnabled(enabled);
 	}
 	
 	@Override

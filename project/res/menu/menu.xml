@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/setingsMenuItem"
-          android:title="@string/settings" />
-    <item android:id="@+id/chartDayMenuItem"
-          android:title="@string/chart_day" /> 
-    <item android:id="@+id/chartMonthMenuItem"
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+      <item android:id="@+id/setingsMenuItem"
+          android:title="@string/settings"
+          android:showAsAction="ifRoom"
+          app:showAsAction="ifRoom" />
+      <item android:id="@+id/chartDayMenuItem"
+          android:title="@string/chart_day"
+          android:showAsAction="ifRoom" 
+          app:showAsAction="ifRoom"/>
+      <item android:id="@+id/chartMonthMenuItem"
+          android:showAsAction="ifRoom" 
+          app:showAsAction="ifRoom"
           android:title="@string/chart_month" />     
- <!-- <item android:id="@+id/pieChartMenuItem"
-          android:title="@string/pie_chart" />-->      
-    <item android:id="@+id/aboutMenuItem"
-          android:title="@string/about" /> 
-	
-	<item android:id="@+id/exitMenuItem"
-          android:title="@string/exit" />    
+      <item android:id="@+id/aboutMenuItem"
+          android:showAsAction="ifRoom" 
+          app:showAsAction="ifRoom"
+          android:title="@string/about"/> 
 </menu>

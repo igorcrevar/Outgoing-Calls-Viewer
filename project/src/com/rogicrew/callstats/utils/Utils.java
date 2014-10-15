@@ -1,14 +1,12 @@
 package com.rogicrew.callstats.utils;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.rogicrew.callstats.models.SimpleDate;
 
 import android.app.Activity;
@@ -16,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.widget.RelativeLayout;
 
 public class Utils {
 
@@ -24,40 +23,6 @@ public class Utils {
 	public static boolean isNullOrEmpty(String s)
 	{
 		return s == null || s.equals("");
-	}
-	
-	public static boolean writeFile(Context ctx, String fileName, String content){
-        try { 
-        	//mode private only this app can open/write this file
-            FileOutputStream fOut = ctx.openFileOutput(fileName, Context.MODE_WORLD_READABLE);//  Context.MODE_PRIVATE);
-            OutputStreamWriter osw = new OutputStreamWriter(fOut); 
-            osw.write(content);
-            osw.flush();
-            osw.close();
-            return true;
-        }
-        catch(IOException e){
-        	//todo:log?
-        	return false;
-        }
-	}
-	
-	public static String readFile(Context ctx, String fileName){
-		try{
-	        FileInputStream fIn = ctx.openFileInput(fileName);
-	        InputStreamReader isr = new InputStreamReader(fIn);
-	        StringBuilder sb = new StringBuilder(250);
-	        char[] tmpBuffer = new char[100];
-	        int cnt;
-	        
-	        while ( (cnt = isr.read(tmpBuffer)) != -1){
-	        	sb.append(tmpBuffer, 0, cnt);
-	        }
-	        return sb.toString();
-		} catch (IOException ioe) {
-		    //todo: log?
-			return null;
-		}		
 	}
 	
 	public static void simpleDialog(final Activity activity, final String text, final boolean close)
@@ -173,5 +138,36 @@ public class Utils {
 			long secondsRoundedToMin = duration % 60 >= 30 ? 1 : 0;
 			return (minutes + secondsRoundedToMin) * 60;	
 		}
+	}
+	
+	public static AdView getAddView(Context ctx) {
+		String unitId = "your_add_unit";
+		AdView adView = new AdView(ctx);
+		adView.setAdUnitId(unitId);
+		adView.setAdSize(AdSize.BANNER);
+		// adView.setAdListener(new ToastAdListener(this));
+		AdRequest adRequest = new AdRequest.Builder()
+						   .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+						   .addTestDevice("your_test_device")
+						   .build();
+		adView.loadAd(adRequest);
+		
+		return adView;
+	}
+	
+	public static void addToLayout(AdView adView, boolean onTop, RelativeLayout relativeLayout) {
+		// Add the AdMob view
+		RelativeLayout.LayoutParams adParams = 
+	            new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 
+	                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+		if (onTop) {
+			adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		}
+		else {
+			adParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		}
+        adParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        relativeLayout.addView(adView, adParams);
 	}
 }

@@ -3,11 +3,11 @@ package com.rogicrew.callstats;
 import java.util.Date;
 import java.util.List;
 import java.util.Stack;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +17,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdView;
 import com.rogicrew.callstats.components.HeaderComponent;
 import com.rogicrew.callstats.components.HeaderComponent.IHeaderComponentChanged;
 import com.rogicrew.callstats.components.PerformanceOutgoingListAdapter;
@@ -28,7 +31,7 @@ import com.rogicrew.callstats.models.SimpleDate;
 import com.rogicrew.callstats.models.SortByEnum;
 import com.rogicrew.callstats.utils.Utils;
 
-public class CallStatsActivity extends Activity implements IHeaderComponentChanged, OnItemClickListener {
+public class CallStatsActivity extends ActionBarActivity implements IHeaderComponentChanged, OnItemClickListener {
 	private static final String breadcrumbsPrefixFirst = "<< ";
 	private static final String breadcrumbsPrefixNext  = "<< ... ";
 	
@@ -40,36 +43,62 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 	private ProgressBar mProgressBar;
 	private volatile boolean isRefreshing = false;
 	private String mMinutesFormater;
+	private RelativeLayout mAdMobLayout;
 	
 	private CallsFilter mCurrentFilter;
 	private Stack<CallsFilter> mStackFilters;
+	
+	private AdView adView;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.outgoing);
+        //RelativeLayout layout = new RelativeLayout(this);        
+        //View mainView = getLayoutInflater().inflate(R.layout.outgoing, null);
+        setContentView(R.layout.outgoing);
+        
         //set prerefences for utils
-        Utils.preferences = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
         mCallModel = new CallModel();
         mCurrentFilter = new CallsFilter();
         mStackFilters = new Stack<CallsFilter>();
         
         mListView = (ListView)findViewById(R.id.listviewOutgoingCalls);   
-        mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
-        mListView.setOnItemClickListener(this);
         mTextViewDuration = (TextView)findViewById(R.id.textviewDurationSum); 
         mProgressBar = (ProgressBar)findViewById(R.id.progressBarList);
-        mBreadcrumb = (TextView)findViewById(R.id.breadcrumbs);
-        
-        //init header component last - it will call this activity callback after init to pick initial filter params
+        mBreadcrumb = (TextView)findViewById(R.id.breadcrumbs);        
         mHeaderComponent = (HeaderComponent)findViewById(R.id.outgoingHeaderComponent);
+        mAdMobLayout = (RelativeLayout)findViewById(R.id.layoutForAdMob);
+        
+        // create add view
+        adView = Utils.getAddView(this);
+        Utils.addToLayout(adView, true, mAdMobLayout);
+        
+        // get preferences 
+        Utils.preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // init
         mHeaderComponent.initOnStart();
         mHeaderComponent.mHeaderComponentChangedCallback = this;
+        mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        mListView.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+    	adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    	adView.resume();
     }
     
-    public void onClick(View view) {
-    	
+    @Override
+    protected void onDestroy() {
+       adView.destroy();
+       super.onDestroy();
     }
     
     @Override
@@ -90,7 +119,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
     
     @Override
@@ -120,10 +149,6 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
             	return true;	
             case R.id.aboutMenuItem:
             	Utils.simpleDialog(this, getString(R.string.about_text), false);
-            	return true;
-            	
-            case R.id.exitMenuItem:
-            	finish();
             	return true;
         	default:
         		return false;
@@ -166,6 +191,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 			isRefreshing = true;
 			mProgressBar.setVisibility(View.VISIBLE);
 			mListView.setVisibility(View.GONE);
+			mAdMobLayout.setVisibility(View.GONE);
 			
 			new AsyncTask<Object, Integer, Long>() {
 				private CallStatsActivity thisActivity = null;
@@ -207,6 +233,7 @@ public class CallStatsActivity extends Activity implements IHeaderComponentChang
 					isRefreshing = false;
 					mProgressBar.setVisibility(View.GONE);
 					mListView.setVisibility(View.VISIBLE);
+					mAdMobLayout.setVisibility(View.VISIBLE);
 			    }
 			}.execute(this);
 		}

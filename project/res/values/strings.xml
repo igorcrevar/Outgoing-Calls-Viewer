@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, CallStatsActivity!</string>
-    <string name="app_name">Outgoing Calls Stats</string>
+	<string name="app_name">Outgoing Calls Statistics</string>
 	<string name="days_month_prompt">Choose a Day in month</string>
 	<string name="days_in_month_prompt">Choose number of Days in month</string>
 	<string name="settings_file">settings.dat</string>
@@ -15,7 +13,7 @@
 	<string name="about">About</string>
 	<string name="normal_view">Normal View</string>
 	<string name="pie_chart">Pie Chart</string>
-	<string name="about_text">Created by Igor Crevar (2012)\n\n JJoe64 GraphView used for charts</string>
+	<string name="about_text">Created by Igor Crevar @2014\n\n JJoe64 GraphView used for charts</string>
 	<string name="pref_start_of_month_title">Start of month</string>
 	<string name="pref_start_of_month_desc">When your payment month starts?</string>
 	<string name="pref_minute_rounding_title">Minute Rounding</string>
@@ -25,4 +23,5 @@
 	<string name="minutes_formater">\u0020(%s minutes)</string>	
 	<string name="duration_string">Sum:\u0020</string>
 	<string name="exit">Exit</string>
+	<string name="imgDsc"></string>
 </resources>
